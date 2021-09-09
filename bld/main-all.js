@@ -12374,6 +12374,9 @@ document.getElementById("fire").onmousedown = function() {
 document.getElementById("fire").onmouseup = function() {
   MIDP.sendKeyRelease(32);
 };
+
+
+
 var Location = {};
 Location.PROVIDER_NAME = "browser";
 Location.Providers = {};
