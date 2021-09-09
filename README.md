@@ -1,2 +1,2 @@
 # j2me_anyview_for_kaios
-j2me_anyview_for_kaios
+j2me_anyview_for_kaios 是一个建立在PluotSorbet基础上的j2me版本的anyview客户端，为kaios设备设计。
