@@ -2,8 +2,10 @@
 
 //----------------------keymap
 
-function handleKeydown(e) { 
-  console.log(e.key);
+function handleKeydown(e) {  
+if (e.key != "EndCall" && e.key!="Backspace") {
+	e.preventDefault();//清除默认行为（滚动屏幕等） 
+}
   switch(e.key) {
     case 'ArrowUp':
       MIDP.sendKeyPress(-1);
@@ -57,6 +59,7 @@ function handleKeydown(e) {
       MIDP.sendKeyPress(42);
       break;
     case '#':
+	  start();
       MIDP.sendKeyPress(35);
       break;
   }
@@ -64,7 +67,9 @@ function handleKeydown(e) {
 
 
 function handleKeyup(e) { 
-  console.log(e.key);
+if (e.key != "EndCall" && e.key!="Backspace") {
+		e.preventDefault();//清除默认行为（滚动屏幕等） 
+	} 
   switch(e.key) {
     case 'ArrowUp':
       MIDP.sendKeyRelease(-1);

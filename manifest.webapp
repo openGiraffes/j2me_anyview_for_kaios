@@ -1,8 +1,8 @@
 {
-  "name": "PluotSorbet",
+  "name": "AnyView",
   "description": "a J2ME-compatible virtual machine written in JavaScript",
-  "launch_path": "/index.html?jars=tests/Anyview4.0.jar&jad=tests/Anyview4.0.jad&midletClassName=com.ismyway.anyview.Anyview",
-  "origin": "app://pluotsorbet.mozilla.org",
+  "launch_path": "/main.html",
+  "origin": "app://pluotsorbet.AnyView.org",
   "version": "1624444801",
   "icons": {
     "128": "/img/icon-128.png",
@@ -51,16 +51,18 @@
     }
   },
   "messages": [
-    { "alarm": "/index.html" }
+    { "alarm": "/main.html" }
   ],
   "activities": {
     "share": {
-      "href": "/index.html",
+      "href": "/main.html",
       "disposition": "window",
       "filters": {
         "type": ["image/*", "video/*", "audio/*"]
       }
     }
   },
-  "type": "privileged"
+  "type": "web",
+  "cursor": false,
+  "fullscreen": true
 }

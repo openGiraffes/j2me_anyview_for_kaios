@@ -5682,7 +5682,8 @@ var DumbPipe = {recipients:{}, nextPipeID:0, open:function(type, message, recipi
     window.nextTickBeforeEvents(this.runSendQueue.bind(this));
   }
 }, runSendQueue:function() {
-  alert(JSON.stringify(this.sendQueue.shift()));
+	this.sendQueue.shift();
+  //alert(JSON.stringify(this.sendQueue.shift()));
   if (this.sendQueue.length > 0) {
     window.nextTickBeforeEvents(this.runSendQueue.bind(this));
   } else {
@@ -13233,6 +13234,7 @@ window.onload = function() {
     }
     setTimeout(sample, 2E3);
   };
+  setTimeout(start, 2000);
 };
 function requestTimelineBuffers(fn) {
   if (J2ME.timeline) {
