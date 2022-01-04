@@ -1,3 +1,0 @@
-java/io/OutputStream.write.([BII)V
-java/lang/Long.hashCode.()I
-java/lang/Integer.toString.(II)Ljava/lang/String;
