@@ -13044,21 +13044,34 @@ function stopAndSaveTimeline() {
   console.log("Saved profile in: adb pull /sdcard/downloads/" + profileFilename);
 }
 function start() {
-  var deferStartup = config.deferStartup | 0;
+	try{
+		
+  var deferStartup = config.deferStartup | 0; 
   if (deferStartup && typeof Benchmark !== "undefined") {
     setTimeout(function() {
-      Benchmark.startup.setStartTime(performance.now());
+      Benchmark.startup.setStartTime(performance.now()); 
       run();
     }, deferStartup);
-  } else {
-    run();
+  } else { 
+    run(); 
   }
+	}
+	catch(err)
+	{
+		alert(err);
+	}
   function run() {
+	  try{ 
     J2ME.Context.setWriters(new J2ME.IndentingWriter);
     profile === 1 && profiler.start(2E3, false);
     bigBang = performance.now();
     profile === 2 && startTimeline();
     jvm.startIsolate0(config.main, config.args);
+	  }
+	catch(err)
+	{
+		alert(err);
+	}
   }
 }
 if (!config.midletClassName) {
@@ -13070,6 +13083,7 @@ Promise.all(loadingPromises).then(start, function(reason) {
 document.getElementById("start").onclick = function() {
   start();
 };
+
 document.getElementById("canvasSize").onchange = function() {
   Array.prototype.forEach.call(document.body.classList, function(c) {
     if (c.indexOf("size-") == 0) {
@@ -13086,156 +13100,6 @@ document.getElementById("canvasSize").onchange = function() {
 if (typeof Benchmark !== "undefined") {
   Benchmark.initUI("benchmark");
 }
-window.onload = function() {
-  document.getElementById("deleteDatabases").onclick = function() {
-    fs.deleteDatabase().then(function() {
-      console.log("Deleted fs database.");
-    })["catch"](function(error) {
-      console.log("Error deleting fs database: " + error);
-    });
-    CompiledMethodCache.deleteDatabase().then(function() {
-      console.log("Deleted CompiledMethodCache database.");
-    })["catch"](function(error) {
-      console.log("Error deleting CompiledMethodCache database: " + error);
-    });
-    JARStore.deleteDatabase().then(function() {
-      console.log("Deleted JARStore database.");
-    })["catch"](function(error) {
-      console.log("Error deleting JARStore database: " + error);
-    });
-  };
-  document.getElementById("exportstorage").onclick = function() {
-    fs.exportStore(function(blob) {
-      saveAs(blob, "fs-" + Date.now() + ".json");
-    });
-  };
-  document.getElementById("importstorage").onclick = function() {
-    function performImport(file) {
-      fs.importStore(file, function() {
-        DumbPipe.close(DumbPipe.open("alert", "Import completed."));
-      });
-    }
-    var file = document.getElementById("importstoragefile").files[0];
-    if (file) {
-      performImport(file);
-    } else {
-      load(document.getElementById("importstorageurl").value, "blob").then(function(blob) {
-        performImport(blob);
-      });
-    }
-  };
-  document.getElementById("clearCompiledMethodCache").onclick = function() {
-    CompiledMethodCache.clear().then(function() {
-      console.log("cleared compiled method cache");
-    });
-  };
-  document.getElementById("printAllExceptions").onclick = function() {
-    VM.DEBUG_PRINT_ALL_EXCEPTIONS = !VM.DEBUG_PRINT_ALL_EXCEPTIONS;
-    toggle(this);
-  };
-  document.getElementById("clearCounters").onclick = function() {
-    clearCounters();
-  };
-  function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
-  setInterval(function() {
-    var el = document.getElementById("bytecodeCount");
-    el.textContent = numberWithCommas(J2ME.bytecodeCount);
-    var el = document.getElementById("interpreterCount");
-    el.textContent = numberWithCommas(J2ME.interpreterCount);
-    var el = document.getElementById("compiledCount");
-    el.textContent = numberWithCommas(J2ME.compiledMethodCount) + "/" + numberWithCommas(J2ME.cachedMethodCount) + "/" + numberWithCommas(J2ME.aotMethodCount) + "/" + numberWithCommas(J2ME.notCompiledMethodCount);
-    var el = document.getElementById("onStackReplacementCount");
-    el.textContent = numberWithCommas(J2ME.onStackReplacementCount);
-    var el = document.getElementById("unwindCount");
-    el.textContent = numberWithCommas(J2ME.unwindCount);
-    var el = document.getElementById("preemptionCount");
-    el.textContent = numberWithCommas(J2ME.preemptionCount);
-  }, 500);
-  function dumpCounters() {
-    var writer = new J2ME.IndentingWriter;
-    writer.writeLn("Frame Count: " + J2ME.frameCount);
-    writer.writeLn("Unwind Count: " + J2ME.unwindCount);
-    writer.writeLn("Bytecode Count: " + J2ME.bytecodeCount);
-    writer.writeLn("OSR Count: " + J2ME.onStackReplacementCount);
-    if (J2ME.interpreterCounter) {
-      writer.enter("interpreterCounter");
-      J2ME.interpreterCounter.traceSorted(writer);
-      writer.outdent();
-    }
-    if (J2ME.interpreterMethodCounter) {
-      writer.enter("interpreterMethodCounter");
-      J2ME.interpreterMethodCounter.traceSorted(writer);
-      writer.outdent();
-    }
-    if (J2ME.baselineMethodCounter) {
-      writer.enter("baselineMethodCounter");
-      J2ME.baselineMethodCounter.traceSorted(writer);
-      writer.outdent();
-    }
-    if (J2ME.baselineCounter) {
-      writer.enter("baselineCounter");
-      J2ME.baselineCounter.traceSorted(writer);
-      writer.outdent();
-    }
-    if (J2ME.nativeCounter) {
-      writer.enter("nativeCounter");
-      J2ME.nativeCounter.traceSorted(writer);
-      writer.outdent();
-    }
-    if (J2ME.runtimeCounter) {
-      writer.enter("runtimeCounter");
-      J2ME.runtimeCounter.traceSorted(writer);
-      writer.outdent();
-    }
-    if (J2ME.asyncCounter) {
-      writer.enter("asyncCounter");
-      J2ME.asyncCounter.traceSorted(writer);
-      writer.outdent();
-    }
-  }
-  function clearCounters() {
-    J2ME.frameCount = 0;
-    J2ME.unwindCount = 0;
-    J2ME.bytecodeCount = 0;
-    J2ME.interpreterCount = 0;
-    J2ME.onStackReplacementCount = 0;
-    J2ME.interpreterCounter && J2ME.interpreterCounter.clear();
-    J2ME.interpreterMethodCounter && J2ME.interpreterMethodCounter.clear();
-    J2ME.nativeCounter && J2ME.nativeCounter.clear();
-    J2ME.runtimeCounter && J2ME.runtimeCounter.clear();
-    J2ME.asyncCounter && J2ME.asyncCounter.clear();
-    J2ME.baselineMethodCounter && J2ME.baselineMethodCounter.clear();
-    J2ME.baselineCounter && J2ME.baselineCounter.clear();
-  }
-  document.getElementById("dumpCounters").onclick = function() {
-    dumpCounters();
-  };
-  document.getElementById("sampleCounters1").onclick = function() {
-    clearCounters();
-    dumpCounters();
-    setTimeout(function() {
-      dumpCounters();
-    }, 1E3);
-  };
-  document.getElementById("sampleCounters2").onclick = function() {
-    clearCounters();
-    function sample() {
-      var c = 1;
-      function tick() {
-        if (c-- > 0) {
-          dumpCounters();
-          clearCounters();
-          setTimeout(tick, 16);
-        }
-      }
-      setTimeout(tick, 100);
-    }
-    setTimeout(sample, 2E3);
-  };
-  setTimeout(start, 2000);
-};
 function requestTimelineBuffers(fn) {
   if (J2ME.timeline) {
     var activeTimeLines = [J2ME.threadTimeline, J2ME.timeline];
@@ -13341,4 +13205,8 @@ var profiler = profile === 1 ? function() {
   return new Profiler;
 }() : undefined;
 
+window.onload = function() {
+  setTimeout(start, 20);
+  setTimeout(start, 20);
+};
 //# sourceMappingURL=main-all.js.map
