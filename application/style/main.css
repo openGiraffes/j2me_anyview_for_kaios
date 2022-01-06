@@ -16,6 +16,7 @@ body {
 
 #File{
     visibility: hidden;
+	display:none;
 }
 
 #display-container {
