@@ -1,16 +1,16 @@
 {
-  "name": "AnyView",
-  "description": "a J2ME-compatible virtual machine written in JavaScript",
+  "name": "Anyview",
+  "description": "Anyview for kaios",
   "launch_path": "/main.html",
-  "origin": "app://pluotsorbet.AnyView.org",
-  "version": "1624444801",
+  "origin": "app://anyview.opengiraffes.top",
+  "version": "4.0.12",
   "icons": {
     "128": "/img/icon-128.png",
     "512": "/img/icon-512.png"
   },
   "developer": {
-    "name": "Mozilla Apps",
-    "url": "http://mozilla.org"
+    "name": "openGiraffes Group",
+    "url": "https://opengiraffes.top"
   },
   "default_locale": "en",
   "orientation": ["portrait", "landscape"],
